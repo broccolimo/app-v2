@@ -1,0 +1,212 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			.div_right {
+				width: 87%;
+				float: left;
+			}
+			
+			.div_left {
+				width: 13%;
+				float: left;
+				height: 126px;
+				line-height: 126px;
+				text-align: center;
+			}
+			
+			.td2 {
+				width: 73%;
+				text-align: right;
+			}
+			
+			.div_default {
+				text-align: center;
+			}
+			
+			.dbtn {
+				text-align: center;
+				background-color: #007AFF;
+				color: #FFFFFF;
+				width: 120px;
+				margin-left: 140px;
+				margin-top: 20px;
+			}
+			
+			.m-td-color {
+				color: #CF2D28;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">退单管理</h1>
+		</header>
+
+		<div id="item-div" class="mui-content">
+			<ul class="mui-table-view" id="item">
+			</ul>
+		</div>
+
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function() {
+				mui.ajax({
+					url: "http://47.93.3.105/api/v1/order/Opt_4",
+					type: "GET",
+					data: {
+						"name": localStorage.getItem("user")
+					},
+					success: function(res) {
+						if(res.msg.obj.length == 0) {
+							mui.alert("您当前没有审核未通过的订单", "提示", "确定", function() {
+								mui.openWindow({
+									url: "main-v2.html",
+									createNew: true
+								});
+							});
+							return;
+						}
+						for(var i = 0; i < res.msg.obj.length; i++) {
+							mui.ajax({
+								url: "http://47.93.3.105/api/v1/order/Opt_2",
+								type: "GET",
+								async: false,
+								data: {
+									"order_id": res.msg.obj[i]
+								},
+								success: function(r) {
+									var cl = new Array(8);
+									cl[0] = "使用单位名称";
+									cl[1] = "电梯地址";
+									cl[2] = "注册代码";
+									cl[3] = "电梯型号";
+									cl[4] = "发单时间";
+									cl[5] = "维保类型";
+									cl[6] = "退单时间";
+									cl[7] = "退单原因";
+									var arr = new Array(8);
+									arr[0] = r.msg.useUnit;
+									arr[1] = r.msg.addr;
+									arr[2] = r.msg.registerID;
+									arr[3] = r.msg.xinghao;
+									arr[4] = new Date(r.msg.obj.release_time).toLocaleString();
+									switch(r.msg.obj.maintain_type) {
+										case 0:
+											arr[5] = "半月维保";
+											break;
+										case 1:
+											arr[5] = "季度维保";
+											break;
+										case 2:
+											arr[5] = "半年维保";
+											break;
+										case 3:
+											arr[5] = "一年维保";
+											break;
+										default:
+											break;
+									};
+									arr[6] = new Date(r.msg.obj.refuse_time[r.msg.obj.refuse_time.length - 1]).toLocaleString();
+									arr[7] = r.msg.obj.refuse_reason[r.msg.obj.refuse_reason.length - 1];
+									//创建li
+									var li = document.createElement("li");
+									li.className = "li";
+
+									var div_left = document.createElement("div");
+									div_left.className = "div_left";
+									var div_right = document.createElement("div");
+									div_right.className = "div_right";
+
+									//创建单选按钮
+									var rad = document.createElement("input");
+									rad.type = "radio";
+									rad.name = "gd";
+									rad.className = "dradio";
+									rad.value = r.msg.obj.order_id;
+
+									div_left.appendChild(rad);
+
+									//创建table
+									var table = document.createElement("table");
+									for(var m = 0; m < 8; m++) {
+										var tr = document.createElement("tr");
+										var td1 = document.createElement("td");
+										td1.className = "td1";
+										var td2 = document.createElement("td");
+										td2.className = "td2";
+										if(m == 6 || m == 7) {
+											td1.classList.add("m-td-color");
+											td2.classList.add("m-td-color");
+										}
+										td1.innerHTML = cl[m];
+										td2.innerHTML = arr[m];
+										tr.appendChild(td1);
+										tr.appendChild(td2);
+										table.appendChild(tr);
+									}
+
+									div_right.appendChild(table);
+
+									li.appendChild(div_left);
+									li.appendChild(div_right);
+									document.getElementById("item").append(li);
+								}
+							});
+						}
+						var button = document.createElement("button");
+						button.innerHTML = "重新维保";
+						button.className = "dbtn";
+						button.addEventListener("tap", function() {
+							var rads = document.getElementsByClassName("dradio");
+							var checkVal = null;
+							for(i = 0; i < rads.length; i++) {
+								if(rads[i].checked) {
+									checkVal = rads[i].value;
+									break;
+								}
+							}
+							if(checkVal == null) {
+								mui.alert("请选择", "提示", "确定");
+								return;
+							}
+							if(localStorage.getItem("canAccept") == "false") {
+								mui.alert("您目前有订单未完成，不能重新维保", "提示", "确定");
+								return;
+							}
+							mui.ajax({
+								url: "http://47.93.3.105/api/v1/order/Opt_13",
+								type: "POST",
+								async: false,
+								data: {
+									"order_id": checkVal,
+									"name": localStorage.getItem("user"),
+									"accept_time": new Date()
+								},
+								success: function(res) {
+									mui.alert("重新维保成功,请到我的任务里查看", "提示", "确定", function() {
+										mui.ajax();
+										mui.openWindow({
+											url: "maintenance.html",
+											createNew: true
+										});
+									});
+								}
+							});
+						});
+						document.getElementById("item-div").append(button);
+					}
+				});
+			});
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			.my-btn{
+				background: #0000FF;
+				color: #FFFFFF;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">用户反馈</h1>
+		</header>
+
+		<div class="mui-content">
+			维保满意度(请选择):
+			<br>
+			<br>
+			<input type="radio" name="satisfy" value="0" class="dradio" />非常满意
+			<br>
+			<br>
+			<input type="radio" name="satisfy" value="1" class="dradio" />满意
+			<br>
+			<br>
+			<input type="radio" name="satisfy" value="2" class="dradio" />一般
+			<br>
+			<br>
+			<input type="radio" name="satisfy" value="3" class="dradio" />不满意
+			<br>
+			<br> 客户签名:
+			<button type="button" id="sign" class="my-btn">签名</button>
+			<br> 服务金额(零部件及材料):
+			<br>
+			<br>
+			<button type="button" id="submit">提交</button>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function() {
+				var self = plus.webview.currentWebview();
+				document.getElementById("sign").addEventListener("tap", function(){
+					document.getElementById("sign").disabled = true;
+					mui.openWindow({
+						url: "signature.html",
+						createNew: true
+					});
+				});
+				document.getElementById("submit").addEventListener("tap", function() {
+					var rads = document.getElementsByClassName("dradio");
+					var checkVal = null;
+					for(i = 0; i < rads.length; i++) {
+						if(rads[i].checked) {
+							checkVal = rads[i].value;
+							break;
+						}
+					}
+					if(checkVal == null) {
+						mui.alert("请选择", "提示", "确定");
+						return;
+					}
+					mui.confirm("提交后将不可修改,确定要提交吗?", "提示", ["取消", "确定"], function(e) {
+						if(e.index == 1) {
+							mui.ajax({
+								url: "http://47.93.3.105/api/v1/order/Opt_7",
+								type: "POST",
+								async: false,
+								data: {
+									"name" : localStorage.getItem("user"),
+									"order_id": self.order_id,
+									"customer_satisfaction": checkVal,
+									"customer_signature_path": "待补充",
+									"commit_time" : new Date()
+								},
+								success: function(res) {
+									localStorage.setItem("canAccept", true);
+									if(res.code == 0) {
+										mui.openWindow({
+											url: "order-submit-result.html"
+										});
+									}
+									else{
+										mui.alert("系统出错");
+									}
+								}
+							});
+						} else {
+						}
+					});
+				});
+			});
+		</script>
+	</body>
+
+</html>

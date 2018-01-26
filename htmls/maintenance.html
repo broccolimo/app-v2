@@ -1,0 +1,355 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			.m-td {
+				text-align: right;
+			}
+			
+			.m-table {
+				width: 96%;
+			}
+			
+			.m-table2 {
+				width: 100%;
+			}
+			
+			.dradio {
+				float: left;
+			}
+			
+			.dbtn {
+				background-color: #007AFF;
+				width: 120px;
+				color: #FFFFFF;
+				text-align: center;
+				margin-left: 35%;
+				margin-top: 10px;
+			}
+			
+			.span1 {
+				color: red;
+			}
+			
+			.span2 {
+				color: green;
+			}
+			
+			.span3 {
+				color: blue;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--头部导航-->
+		<header id="header" class="mui-bar mui-bar-nav">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left" href="main-v2.html"></a>
+			<a href="#middlePopover" class="mui-btn-link mui-pull" style="padding: 5px 20px;">
+				待处理工单▼
+			</a>
+		</header>
+
+		<div class="mui-content">
+			<div style="padding: 10px 10px;">
+				<div id="segmentedControl" class="mui-segmented-control">
+					<a class="mui-control-item" href="#item1">工单池</a>
+					<a class="mui-control-item mui-active" href="#item2">我的任务</a>
+				</div>
+			</div>
+
+			<div>
+				<div id="item1" class="mui-control-content">
+					<ul class="mui-table-view" id="orderpool">
+					</ul>
+				</div>
+				<div id="item2" class="mui-control-content mui-active">
+					<ul class="mui-table-view" id="mytask">
+				</div>
+			</div>
+		</div>
+
+		<div id="middlePopover" class="mui-popover">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" style="text-align: center;" id="t1">已提交</li>
+				<li class="mui-table-view-cell" style="text-align: center;" id="t2">已完成</li>
+			</ul>
+		</div>
+
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			var num = 0;
+			mui.plusReady(function() {
+				var self = plus.webview.currentWebview();
+
+				document.getElementById("t1").addEventListener("tap", function() {
+					mui.openWindow({
+						url: "check-pending.html",
+						createNew: true
+					});
+				});
+
+				document.getElementById("t2").addEventListener("tap", function() {
+					mui.openWindow({
+						url: "order-finished.html",
+						createNew: true
+					});
+				});
+				
+				
+				//加载工单池
+				mui.ajax({
+					url: "http://47.93.3.105/api/v1/order/showOrders",
+					type: "GET",
+					async: false,
+					data: {
+						rating_person: localStorage.getItem("user")
+					},
+					success: function(res) {
+						if(res.code == 0) {
+							var cl = new Array(6);
+							cl[0] = "使用单位名称";
+							cl[1] = "电梯地址";
+							cl[2] = "注册代码";
+							cl[3] = "电梯型号";
+							cl[4] = "发单时间";
+							cl[5] = "维保类型";
+							for(var x in res.msg.obj) {
+								num = num + 1;
+								var arr = new Array(6);
+								orderId = res.msg.obj[x].order_id;
+								arr[4] = new Date(res.msg.obj[x].release_time).toLocaleString();
+								switch(res.msg.obj[x].maintain_type) {
+									case 0:
+										arr[5] = "半月维保";
+										break;
+									case 1:
+										arr[5] = "季度维保";
+										break;
+									case 2:
+										arr[5] = "半年维保";
+										break;
+									case 3:
+										arr[5] = "一年维保";
+										break;
+									default:
+										break;
+								}
+								mui.ajax({
+									url: "http://47.93.3.105/api/v1/device/info",
+									type: "GET",
+									async: false,
+									data: {
+										"id": res.msg.obj[x].list_id
+									},
+									success: function(res) {
+										arr[0] = res.data['useUnitID'];
+										arr[1] = res.data['addr'].province + res.data['addr'].city + res.data['addr'].addr;
+										arr[2] = res.data['registerID'];
+										arr[3] = res.data['elevatorModel'];
+										var ul = document.getElementById("orderpool");
+										var li = document.createElement("li");
+										var temp = orderId;
+										li.className = "mui-table-view-cell";
+										var rad = document.createElement("input");
+										rad.type = "radio";
+										rad.name = "gd"
+										rad.className = "dradio";
+										rad.value = temp;
+										var table = document.createElement("table");
+										table.className = "m-table";
+										for(var i = 0; i < 6; i++) {
+											var tr = document.createElement("tr");
+											var td1 = document.createElement("td");
+											var td2 = document.createElement("td");
+											td2.className = "m-td";
+											td1.innerHTML = cl[i];
+											td2.innerHTML = arr[i];
+											tr.appendChild(td1);
+											tr.appendChild(td2);
+											table.appendChild(tr);
+										}
+										li.append(rad);
+										li.append(table);
+										ul.append(li);
+									}
+								});
+							}
+						} else {
+							mui.alert("系统繁忙", "提示", "确定", function() {
+								mui.openWindow({
+									url: "main-v2.html"
+								});
+							});
+						}
+					}
+				});
+
+				//加载接单按钮
+				if(num != 0) {
+					var button = document.createElement("button");
+					button.type = "button";
+					button.append("接单");
+					button.className = "dbtn";
+					document.getElementById("item1").appendChild(button);
+					button.addEventListener("tap", function() {
+						var rads = document.getElementsByClassName("dradio");
+						var checkVal = null;
+						for(i = 0; i < rads.length; i++) {
+							if(rads[i].checked) {
+								checkVal = rads[i].value;
+								break;
+							}
+						}
+						if(checkVal == null) {
+							mui.alert("请选择");
+							return;
+						}
+						if(localStorage.getItem("canAccept") == "false") {
+							mui.alert("您当前有未完成的订单，请完成后再接单", "提示:", "确定", null);
+							return;
+						}
+						mui.ajax({
+							url: "http://47.93.3.105/api/v1/order/Opt_1",
+							type: "POST",
+							data: {
+								"name": localStorage.getItem("user"),
+								"orderId": checkVal,
+								"accept_time": new Date()
+							},
+							success: function(res) {
+								console.log(res.code + " || " + res.msg);
+							}
+						});
+						localStorage.setItem("canAccept", false);
+						mui.alert("接单成功", "提示", "确定", function() {
+							mui.openWindow({
+								url: "order-processing.html",
+								extras: {
+									order_id: checkVal
+								},
+								createNew: true
+							});
+						});
+					});
+				}
+				//加载我的任务
+				mui.ajax({
+					url: "http://47.93.3.105/api/v1/order/getThisInfo",
+					type: "GET",
+					data: {
+						"name": localStorage.getItem("user")
+					},
+					success: function(r1) {
+						if(r1.code == -2 || r1.msg.obj.length == 0) {
+							return;
+						}
+						var order_id = r1.msg.obj.order_id;
+						var flag = r1.msg.obj.flag;
+						var arr = new Array(6);
+						arr[4] = new Date(r1.msg.obj.release_time).toLocaleString();
+						switch(r1.msg.obj.maintain_type) {
+							case 0:
+								arr[5] = "半月维保";
+								break;
+							case 1:
+								arr[5] = "季度维保";
+								break;
+							case 2:
+								arr[5] = "半年维保";
+								break;
+							case 3:
+								arr[5] = "一年维保";
+								break;
+							default:
+								break;
+						};
+						mui.ajax({
+							url: "http://47.93.3.105/api/v1/device/info",
+							type: "GET",
+							async: false,
+							data: {
+								"id": r1.msg.obj.list_id
+							},
+							success: function(res) {
+								var li = document.createElement("li");
+								li.value = flag;
+								li.className = "mui-table-view-cell";
+								var span = document.createElement("span");
+								if(flag == 1) {
+									span.innerHTML = "状态:未开始";
+									span.className = "span1";
+								}
+								if(flag == 2) {
+									span.innerHTML = "状态:进行中";
+									span.className = "span2";
+								}
+								if(flag == 3) {
+									span.innerHTML = "状态:审核中";
+									span.className = "span3";
+								}
+								li.appendChild(span);
+								var blank = document.createElement("div");
+								blank.innerHTML = "<br/>";
+								li.appendChild(blank);
+								var table = document.createElement("table");
+								table.className = "m-table2";
+								var cl = new Array(6);
+								cl[0] = "使用单位名称";
+								cl[1] = "电梯地址";
+								cl[2] = "注册代码";
+								cl[3] = "电梯型号";
+								cl[4] = "发单时间";
+								cl[5] = "维保类型";
+								arr[0] = res.data['useUnitID'];
+								arr[1] = res.data['addr'].province + res.data['addr'].city + res.data['addr'].addr;
+								arr[2] = res.data['registerID'];
+								arr[3] = res.data['elevatorModel'];
+								for(var i = 0; i < 6; i++) {
+									var tr = document.createElement("tr");
+									var td1 = document.createElement("td");
+									var td2 = document.createElement("td");
+									td2.className = "m-td";
+									td1.innerHTML = cl[i];
+									td2.innerHTML = arr[i];
+									tr.appendChild(td1);
+									tr.appendChild(td2);
+									table.appendChild(tr);
+								}
+								li.appendChild(table);
+								li.addEventListener("tap", function() {
+									if(li.value == 1 || li.value == 2)
+										mui.openWindow({
+											url: "order-processing.html",
+											extras: {
+												order_id: order_id
+											},
+											createNew: true
+										});
+									if(li.value == 3) {
+										mui.alert("该订单正在审核中");
+									}
+								});
+								document.getElementById("mytask").appendChild(li);
+							}
+						});
+					}
+				});
+				//自定义back
+				mui.back = function() {
+					mui.openWindow({
+						url: "main-v2.html",
+						createNew: true
+					});
+				};
+			});
+		</script>
+	</body>
+
+</html>

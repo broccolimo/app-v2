@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			#signature{
+				border-bottom: #000000 1px solid;
+			}
+			#btn1{
+				color: #FFFFFF;
+				background-color: #0000FF;
+				text-align: center;
+				margin-top: 12px;
+				margin-left: 20px;
+				width: 30%;
+			}
+			
+			#btn2{
+				float: right;
+				color: #FFFFFF;
+				background-color: #0000FF;
+				text-align: center;
+				margin-top: 12px;
+				width: 30%;
+				margin-right: 20px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">请签名</h1>
+		</header>
+		
+		<div class="mui-content">
+		    <div id="signature"></div>
+		    <button id="btn1">重新书写</button>
+		    <button id="btn2">完成</button>
+		</div>
+		
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/jquery.js"></script>
+		<script src="../js/jSignature.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function(){
+				$("#signature").jSignature('init',{height:'600px',width:'100%'});
+				
+				document.getElementById("btn1").addEventListener("tap", function(){
+					$("#signature").jSignature("reset");
+				});
+				
+				document.getElementById("btn2").addEventListener("tap", function(){
+					var datapair = $("#signature").jSignature("getData", "image");
+					console.log(datapair[1]);
+					mui.ajax({
+						url: "http://47.93.3.105/api/v1/order/sendSignature",
+						type: "POST",
+						data:{
+							"order_id" : "288888888",
+							"base64" : datapair[1]
+						},
+						success: function(res){
+							console.log(res.code);
+							console.log(res.msg);
+							if(res.code == 0){
+								mui.alert("签名完成", "提示", "确定", function(){
+									mui.back();
+								});
+							}
+						}
+					});
+				});
+			});
+		</script>
+	</body>
+
+</html>

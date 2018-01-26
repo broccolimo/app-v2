@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			.m-btn{
+				background-color: #007AFF;
+				color: #FFFFFF;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <h1 class="mui-title">标题</h1>
+		</header>
+		
+		<div class="mui-content">
+		    请输入退单原因：
+		  <textarea rows="13" id="textarea"></textarea>
+		  <button type="button" id="pass" class="m_btn">确定</button>
+		  <button type="button" id="back" class="m_btn">取消</button>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function(){
+				var self = plus.webview.currentWebview();
+				
+				document.getElementById("pass").addEventListener("tap", function(){
+					mui.ajax({
+						url: "http://47.93.3.105/api/v1/order/Opt_12",
+						type: "POST",
+						async: false,
+						data: {
+							"order_id" : self.order_id,
+							"accept_person" : self.accept_person,
+							"refuse_time" : new Date(),
+							"refuse_reason" : document.getElementById("textarea").value
+						},
+						success: function(res){
+							if(res.code == 0){
+								mui.alert("操作成功", "提示", "确定", function(){
+									mui.openWindow({
+										url: "main-v2.html"
+									});
+								});
+							}
+							else{
+								mui.alert("系统出错");
+							}
+						}
+					});
+				});
+			});
+		</script>
+	</body>
+
+</html>

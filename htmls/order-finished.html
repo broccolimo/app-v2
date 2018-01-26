@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			.m-td{
+				text-align: right;
+			}
+			.m-td-color{
+				color: #2AC845;
+			}
+			.m-table{
+				width: 100%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left" href="main-v2.html">首页</a>
+			<a href="#middlePopover" class="mui-btn-link mui-pull" style="padding: 5px 20px;">
+				已完成工单▼
+			</a>
+		</header>
+		<div class="mui-content">
+			<div id="middlePopover" class="mui-popover">
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell" id="t1" style="text-align: center;">待处理</li>
+					<li class="mui-table-view-cell" id="t2" style="text-align: center;">已提交</li>
+				</ul>
+			</div>
+			<ul class="mui-table-view" id="item">
+
+			</ul>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function() {
+				//页面跳转
+				document.getElementById("t1").addEventListener("tap", function(){
+					mui.openWindow({
+						url: "maintenance.html",
+						createNew: true
+					});
+				});
+				
+				document.getElementById("t2").addEventListener("tap", function(){
+					mui.openWindow({
+						url: "check-pending.html",
+						createNew: true
+					});
+				});
+				
+				
+				//定义一些量
+				var cl = new Array(7);
+				cl[0] = "通过时间"
+				cl[1] = "使用单位名称";
+				cl[2] = "电梯地址";
+				cl[3] = "注册代码";
+				cl[4] = "电梯型号";
+				cl[5] = "发单时间";
+				cl[6] = "维保类型";
+				
+				mui.ajax({
+					url: "http://47.93.3.105/api/v1/order/Opt_11",
+					type: "GET",
+					async: false,
+					data: {
+						"name" : localStorage.getItem("user")
+					},
+					success: function(r1){
+						if(r1.msg.obj.length == 0) {
+							mui.alert("当前没有已完成交订单", "提示", "确定", function() {
+								mui.back();
+							});
+							return;
+						}
+						for(var i = 0; i < r1.msg.obj.length; i++){
+							var cur = r1.msg.obj[i];
+							
+							mui.ajax({
+								url: "http://47.93.3.105/api/v1/order/Opt_2",
+								type: "GET",
+								async: false,
+								data: {
+									"order_id": cur
+								},
+								success: function(r2){
+									var arr = new Array(7);
+									arr[0] = new Date(r2.msg.obj.pass_time).toLocaleString();
+									arr[1] = r2.msg.useUnit;
+									arr[2] = r2.msg.addr;
+									arr[3] = r2.msg.registerID;
+									arr[4] = r2.msg.xinghao;
+									arr[5] = new Date(r2.msg.obj.release_time).toLocaleString();
+									switch(r2.msg.obj.maintain_type) {
+										case 0:
+											arr[6] = "半月维保";
+											break;
+										case 1:
+											arr[6] = "季度维保";
+											break;
+										case 2:
+											arr[6] = "半年维保";
+											break;
+										case 3:
+											arr[6] = "一年维保";
+											break;
+										default:
+											break;
+									};
+									
+									var li = document.createElement("li");
+									li.className = "mui-table-view-cell";
+									var table = document.createElement("table");
+									table.className = "m-table";
+									for(var i = 0; i < 7; i++) {
+										var tr = document.createElement("tr");
+										var td1 = document.createElement("td");
+										var td2 = document.createElement("td");
+										td2.className = "m-td";
+										if(i == 0){
+											td1.classList.add("m-td-color");
+											td2.classList.add("m-td-color");
+										}
+										td1.innerHTML = cl[i];
+										td2.innerHTML = arr[i];
+										tr.appendChild(td1);
+										tr.appendChild(td2);
+										table.appendChild(tr);
+									}
+									li.appendChild(table);
+									
+									li.addEventListener("tap", function(){
+										mui.openWindow({
+											url: "order-finished-detail.html",
+											extras: {
+												order_id : cur
+											}
+										});
+									});
+									document.getElementById("item").appendChild(li);
+								}
+							});
+						}
+					}
+				});
+			});
+		</script>
+	</body>
+
+</html>

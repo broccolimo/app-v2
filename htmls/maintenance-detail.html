@@ -1,0 +1,4347 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<style>
+			.maintainBox {
+				display: none;
+			}
+			
+			.tableBox {
+				width: 100%;
+				padding: 10px;
+			}
+			
+			.tableBox #liftMessage {
+				width: 100%;
+			}
+			
+			th {
+				white-space: nowrap;
+			}
+			
+			th,
+			td {
+				padding: 5px;
+			}
+			
+			.maintainBox ul {
+				width: 100%;
+				padding: 10px;
+				list-style: none;
+			}
+			
+			.maintainBox li {
+				width: 100%;
+				padding: 10px;
+			}
+			
+			.maintainBox li table {
+				width: 100%;
+			}
+			
+			.maintainBox li table select {
+				width: 200px;
+			}
+			
+			.buttonBox {
+				position: fixed;
+				z-index: 10;
+				width: 100%;
+				bottom: 10px;
+				left: 0;
+			}
+			
+			.buttonBox button {
+				float: left;
+				width: 40%;
+				margin: 0 5%;
+			}
+			
+			.my-div-img {
+				float: right;
+				width: 200px;
+				height: 200px;
+			}
+			
+			.my-img {
+				width: 100%;
+				height: 100%;
+			}
+			
+			button {}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-icon mui-icon-left-nav" id="back"></a>
+			<h1 class="mui-title">维保详情</h1>
+		</header>
+		<div class="mui-content">
+			<div style="padding: 10px 10px;">
+				<div id="segmentedControl" class="mui-segmented-control">
+					<a class="mui-control-item mui-active" href="#item1">电梯信息</a>
+					<a class="mui-control-item" href="#item2">维保填写</a>
+				</div>
+			</div>
+			<div id="item1" class="mui-control-content mui-active">
+				<div class="numBox">
+					<table id='liftMessage' border='1'>
+						<tr>
+							<th>使用单位编号</th>
+							<td id='useUnitID'></td>
+						</tr>
+						<tr>
+							<th>产品编号</th>
+							<td id='productID'></td>
+						</tr>
+						<tr>
+							<th>制造单位</th>
+							<td id='makeUnit' colspan='3'></td>
+						</tr>
+						<tr>
+							<th>安装单位</th>
+							<td id='installUnit' colspan='3'></td>
+						</tr>
+						<tr>
+							<th>改造/修理单位</th>
+							<td id="repairUnit" colspan='3'></td>
+						</tr>
+						<tr>
+							<th>维保单位</th>
+							<td id="maintainUnit" colspan='3'></td>
+						</tr>
+						<tr>
+							<th>电梯型号</th>
+							<td id="elevatorModel"></td>
+						</tr>
+						<tr>
+							<th>曳引机型号</th>
+							<td id="tractionMachineModel"></td>
+						</tr>
+						<tr>
+							<th>曳引绳根数/直径</th>
+							<td id="tractionMachine"></td>
+						</tr>
+						<tr>
+							<th>电动机功率</th>
+							<td id='motorPower'></td>
+						</tr>
+						<tr>
+							<th>控制柜型号</th>
+							<td id="controlBox"></td>
+						</tr>
+						<tr>
+							<th>制动器型号</th>
+							<td id="brakes"></td>
+						</tr>
+						<tr>
+							<th>限速器型号</th>
+							<td id="speedLimiter"></td>
+						</tr>
+						<tr>
+							<th>安全钳型号</th>
+							<td id="safetyGear"></td>
+						</tr>
+						<tr>
+							<th>门锁型号</th>
+							<td id="doorLock"></td>
+						</tr>
+						<tr>
+							<th>额定速度</th>
+							<td id='ratedSpeed'></td>
+						</tr>
+						<tr>
+							<th>额定载重</th>
+							<td id="ratedLoad"></td>
+						</tr>
+						<tr>
+							<th>层站</th>
+							<td id="layers"></td>
+						</tr>
+						<tr>
+							<th>改造后型号</th>
+							<td id="transformModel"></td>
+						</tr>
+						<tr>
+							<th>年检有效期</th>
+							<td id="annualInspection"></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<div id="item2" class="mui-control-content">
+				<div class="mui-content-padded buttonBox">
+					<button type="button" class="mui-btn mui-btn-block mui-btn-primary" id="save">保存</button>
+					<button type="button" class="mui-btn mui-btn-block mui-btn-primary" id="next">下一步</button>
+				</div>
+				<div class="maintainBox halfMon" id="halfMon">
+					<ul>
+						<li>
+							<table class="num1" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>机房、滑轮间环境</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>清洁，门窗完好，照明正常</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num2" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>手动紧急操作装置</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>齐全，在指定位置</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num3" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>驱动主机</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>运行无异常振动和异常声响</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num4" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>制动器个销轴部位</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>润滑、动作灵活</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num5" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>制动器间隙</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>打开时制动衬与轮无摩擦，间隙符合制造单位要求</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num6" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>制动器作为轿厢意外移动保护装置制停子系统时的自监测</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>制动力人工方式检测符合使用维护说明书要求；制动力自监测系统有记录</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num7" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>编码器</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>清洁，安装牢固</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num8" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>限速器各销轴部位</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>润滑，转动灵活，电器开关正常</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num9" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>层门和桥门旁路装置</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>工作正常</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num10" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>紧急电动运行</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>工作正常</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num11" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>桥顶</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>清洁，防护栏安全可靠</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num12" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>桥顶检修、急停开关</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>工作正常</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num13" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>导靴油杯</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>清洁，防护栏安全可靠</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num14" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>对重/平衡重块及其压板</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>对重块/平衡重块无松动，螺栓紧固</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num15" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>井道照明</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>齐全、正常</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num16" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>轿厢照明、风扇、应急灯</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>工作正常</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num17" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>轿厢检修、停止装置</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>工作正常</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num18" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>轿内报警装置、对讲系统</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>工作正常</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num19" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>轿内显示、指令按钮、IC卡系统</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>齐全、有效</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num20" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>轿门防撞击保护（安全触板、光幕等）</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>功能有效</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num21" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>轿门门锁电器触点</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>清洁，触点接触良好，接线可靠</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num22" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>轿门运行</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>开启和关闭工作正常</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num23" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>轿厢平层精度</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>符合标准值</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num24" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>层站召唤、楼层显示</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>齐全、有效</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num25" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>层门地坎</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>清洁</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num26" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>层门自动关门装置</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>正常</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num27" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>层门门锁自动复位</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>用层门钥匙开锁后释放，门锁能自动复位</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num28" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>层门门锁电器触点</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>清洁，接触良好，接线可靠</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num29" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>层门锁紧元件啮合深度</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>不小于7mm</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num30" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>底坑环境</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>清洁，无渗水、积水，照明正常</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num31" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>底坑停止装置</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>工作正常</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num32" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>轿内合格证、报修电话、乘梯说明</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>在检验周期内、标识齐全</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class="photo">拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<br />
+							<br />
+						</li>
+					</ul>
+				</div>
+				<div class="maintainBox quartely" id="quartely">
+					<ul>
+						<li>
+							<table class="num1" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>减速器润滑油</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>油量适宜，初蜗杆伸出端外无渗漏</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num2" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>制动衬</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>清洁，磨损量不超过制造单位要求</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num3" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>编码器</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>工作正常</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num4" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>选层器动静触点</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>清洁，无烧蚀</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num5" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>清洁，钢丝绳无严重油腻，张力均匀，符合制造单位要求</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>打开时制动衬与轮无摩擦，间隙符合制造单位要求</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num6" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>限速器轮槽、限速器钢丝绳</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>清洁，无严重油腻</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num7" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>靴衬、滚轮</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>清洁，磨损量不超过制造单位要求</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num8" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>验证轿门轿门关闭的电气安全装置</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>工作正常</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num9" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>层门/轿门传动钢丝/链条/传动带</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>按制造单位要求清洁，调整</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num10" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>层门门导靴</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>磨损量不超过制造单位要求</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num11" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>消防开关</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>工作正常，功能有效</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num12" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>耗能缓冲器</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>电气开关有效，油量适宜，柱塞无锈蚀</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num13" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>限速器张紧轮装置和电气安全装置</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>工作正常</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<br />
+							<br />
+						</li>
+					</ul>
+				</div>
+				<div class="maintainBox halfYear" id="halfYear">
+					<ul>
+						<li>
+							<table class="num1" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>电动机、减速箱连轴螺栓</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>连接无松动，弹性元件外观良好，无老化等现象</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/> 
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num2" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>驱动轮、导向轮轴承部</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>无异常声响，无振动，润滑良好</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num3" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>曳引轮槽</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>磨损量不超过制造单位要求</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num4" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>制动器动作状态监测装置</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>工作正常，制动器动作可靠</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num5" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>控制柜内各接线端子</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>各接线紧固，整齐，线号齐全清晰</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num6" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>控制柜各仪表</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>显示正常</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num7" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>井道、对重、轿顶各反绳轮轴承部</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>无异常声，无振动，润滑良好</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num8" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>曳引装置、补偿绳</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>磨损量，断丝数不超过要求</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num9" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>绳头组合</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>螺帽无松动，开口销齐全</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num10" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>限速器钢丝绳</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>磨损量，断丝数不超过制造单位要求</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num11" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>层门、轿门门扇</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>门扇相关间隙符合标准值</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num12" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>轿门开门限制装置</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>工作正常</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num13" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>对重缓冲器距离</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>符合标准值</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num14" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>补偿链（绳）与轿厢、对重接合处</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>固定牢靠无松动，开口销齐全</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num15" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>上下极限开关</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>工作正常</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<br />
+							<br />
+						</li>
+					</ul>
+				</div>
+				<div class="maintainBox year" id="year">
+					<ul>
+						<li>
+							<table class="num1" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>减速机润滑油</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>按照制造单位要求适时更换，保证油质符合要求</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num2" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>控制柜接触器、继电器触点</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>接触良好</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num3" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>制动器铁芯（柱塞）</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>进行清洁、润滑、检查，磨损不超过制造单位要求</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num4" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>制动器制动能力</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>符合制造单位要求，保持有足够的制动力，必要时进行轿厢装载125%额定载重量的制动试验</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num5" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>导电回路绝缘测试</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>符合标准</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num6" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>限速器安全钳联动试验</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>工作正常</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num7" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>上行超速保护装置动作试验</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>工作正常</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num8" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>轿厢意外移动保护装置动作试验</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>工作正常</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num9" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>轿顶、轿厢架、轿门及其附件安装螺栓</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>紧固</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num10" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>轿厢和对重/平衡重的导轨支架</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>固定，无松动</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num11" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>轿厢和对重/平衡重的导轨</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>清洁，压板牢固</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num12" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>随行电缆</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>固定可靠、无损伤</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num13" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>层门装置和地坎</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>无影响正常使用的变形，各安装螺栓紧固</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num14" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>轿厢称重装置</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>准确有效</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num15" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>安全钳钳座</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>固定，无松动</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num16" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>轿底各安装螺栓</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>紧固</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<table class="num17" border="1">
+								<tr>
+									<th>维保项目</th>
+									<td>缓冲器</td>
+								</tr>
+								<tr>
+									<th>维保要求</th>
+									<td>固定，无松动</td>
+								</tr>
+								<tr>
+									<th>现状</th>
+									<td>
+										<select class="status">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="tj sp" />是否调校</span><input type="text" class="it1" style="display:none"/>
+										<br />
+										<span style="display: none;"><input type="checkbox" class="gh sp" />是否更换</span><input type="text" class="it2" style="display:none"/>
+									</td>
+								</tr>
+
+								<tr>
+									<th>结果</th>
+									<td>
+										<select class="result">
+											<option hidden value="0">==请选择==</option>
+											<option value="1">正常</option>
+											<option value="2">不正常</option>
+											<option value="3">不存在</option>
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th>添加图片</th>
+									<td>
+										<button type="button" class='photo'>拍照</button>
+										<div class="my-div-img">
+											<img class="my-img" alt="无" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</li>
+						<li>
+							<br />
+							<br />
+						</li>
+					</ul>
+				</div>
+			</div>
+
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/jquery.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function() {
+				var self = plus.webview.currentWebview();
+				//加载电梯信息
+				mui.ajax({
+					url: "http://47.93.3.105/api/v1/order/getDeviceInfo",
+					type: "GET",
+					data: {
+						order_id: self.order_id
+					},
+					success: function(res) {
+						if(res.code == 0) {
+							document.getElementById("useUnitID").innerHTML = res.msg.obj.useUnitID;
+							document.getElementById("productID").innerHTML = res.msg.obj.productID;
+							document.getElementById("makeUnit").innerHTML = res.msg.obj.makeUnit;
+							document.getElementById("installUnit").innerHTML = res.msg.obj.installUnit;
+							document.getElementById("repairUnit").innerHTML = res.msg.obj.repairUnit;
+							document.getElementById("maintainUnit").innerHTML = res.msg.obj.maintainUnit;
+							document.getElementById("elevatorModel").innerHTML = res.msg.obj.elevatorModel;
+							document.getElementById("tractionMachineModel").innerHTML = res.msg.obj.tractionMachineModel;
+							document.getElementById("tractionMachine").innerHTML = res.msg.obj.tractionMachine.num + "/" + res.msg.obj.tractionMachine.diameter;
+							document.getElementById("motorPower").innerHTML = res.msg.obj.motorPower;
+							document.getElementById("controlBox").innerHTML = res.msg.obj.controlBox;
+							document.getElementById("brakes").innerHTML = res.msg.obj.brakes;
+							document.getElementById("speedLimiter").innerHTML = res.msg.obj.speedLimiter;
+							document.getElementById("safetyGear").innerHTML = res.msg.obj.safetyGear;
+							document.getElementById("doorLock").innerHTML = res.msg.obj.doorLock;
+							document.getElementById("ratedSpeed").innerHTML = res.msg.obj.ratedSpeed;
+							document.getElementById("ratedLoad").innerHTML = res.msg.obj.ratedLoad;
+							document.getElementById("layers").innerHTML = res.msg.obj.layers.floor + "层" + res.msg.obj.layers.station + "站" + res.msg.obj.layers.door;
+							document.getElementById("transformModel").innerHTML = res.msg.obj.transformModel;
+							document.getElementById("annualInspection").innerHTML = res.msg.obj.annualInspection;
+						}
+					}
+				});
+
+				//定义选中的class
+				var theClass;
+				//根据维保类型选择加载哪一个div
+				switch(self.maintain_type) {
+					case 0:
+						document.getElementById("halfMon").style.display = "block";
+						theClass = "halfMon";
+						break;
+					case 1:
+						document.getElementById("quartely").style.display = "block";
+						theClass = "quartely";
+						break;
+					case 2:
+						document.getElementById("halfYear").style.display = "block";
+						theClass = "halfYear";
+						break;
+					case 3:
+						document.getElementById("year").style.display = "block";
+						theClass = "year";
+						break;
+					default:
+						break;
+				}
+
+				//赋值
+				mui.ajax({
+					url: "http://47.93.3.105/api/v1/order/maintenance" + self.maintain_type,
+					type: "GET",
+					async: false,
+					data: {
+						"maintain_id": self.maintain_id
+					},
+					success: function(res) {
+						for(var x in res.msg.obj.maintainContent) {
+							//现状
+							$("." + theClass).find("." + x).find(".status").find("option[value=" + res.msg.obj.maintainContent[x].status + "]").attr("selected", true);
+							//结果
+							$("." + theClass).find("." + x).find(".result").find("option[value=" + res.msg.obj.maintainContent[x].result + "]").attr("selected", true);
+							//图片
+							if(res.msg.obj.maintainContent[x].imagePath != "" && res.msg.obj.maintainContent[x].imagePath != undefined) {
+								mui.ajax({
+									url: "http://47.93.3.105/api/v1/maintain/loadPhoto",
+									type: "POST",
+									async: false,
+									data: {
+										"photoUrl": res.msg.obj.maintainContent[x].imagePath
+									},
+									success: function(r) {
+										$("." + theClass).find("." + x).find(".my-img").attr("src", "data:image/jpeg;base64," + r);
+										$("." + theClass).find("." + x).find(".my-img").css("transform", "rotate(90deg)"); 
+									}
+								});
+							} 
+							else {
+								$("." + theClass).find("." + x).find(".my-img").attr("alt", "暂无图片");
+							}
+							//调校
+							if(res.msg.obj.maintainContent[x].tj != "" && res.msg.obj.maintainContent[x].tj != undefined){
+								var now = $("." + theClass).find("." + x).find(".tj");
+								now.prop("checked", true);
+								now.parent().css("display", "block");
+								now.parent().next().css("display", "block");
+								now.parent().next().val(res.msg.obj.maintainContent[x].tj);
+								now.parent().next().next().next().css("display", "block");
+								now.parent().next().next().next().next().css("display", "block");
+							}
+							//更换
+							if(res.msg.obj.maintainContent[x].gh != "" && res.msg.obj.maintainContent[x].gh != undefined){
+								var now = $("." + theClass).find("." + x).find(".gh");
+								now.prop("checked", true);
+								now.parent().css("display", "block");
+								now.parent().next().css("display", "block");
+								now.parent().next().val(res.msg.obj.maintainContent[x].tj);
+								now.parent().prev().prev().css("display", "block");
+								now.parent().prev().prev().prev().css("display", "block");
+							}
+						}
+					}
+				});
+
+				
+				mui(document.body).on("change", ".status", function(e){
+					var o = $(this)
+					if($(this).val() == 2){
+						$(this).next().next().css("display", "block");
+						$(this).next().next().next().next().next().css("display", "block");
+						var that = o.next().next().children(":first");
+						if(that.is(":checked")){that.parent().next().css("display", "block");}
+						var that2 = o.next().next().next().next().next().children(":first");
+						if(that2.is(":checked")){that2.parent().next().css("display", "block");}
+					}
+					else{
+						//该隐藏的全隐藏
+						$(this).next().next().css("display", "none");
+						$(this).next().next().next().next().next().css("display", "none");
+						$(this).next().next().next().css("display", "none");
+						$(this).next().next().next().next().next().next().css("display", "none");
+						//把文本框置空
+						$(this).next().next().next().val("");
+						$(this).next().next().next().next().next().next().val("");
+						//使复选框不被选中
+						$(this).next().next().children(":first").prop("checked", false);
+						$(this).next().next().next().next().next().children(":first").prop("checked", false);
+					}
+				});
+				
+				mui(document.body).on("change", ".sp", function(e){
+					if($(this).is(":checked") == true){
+						$(this).parent().next().css("display", "block");
+					}
+					else{
+						$(this).parent().next().css("display", "none");
+					}
+				});
+				
+				//拍照
+				mui(document.body).on("tap", ".photo", function(e) {
+					var that = this.nextElementSibling.childNodes[1];
+					var cmr = plus.camera.getCamera();
+					var res = cmr.supportedImageResolutions[0]; 
+					var fmt = cmr.supportedImageFormats[0];
+					cmr.captureImage(
+						function(path) {
+							plus.io.resolveLocalFileSystemURL(path, function(entry) {
+								var img = that;
+								img.src = entry.toLocalURL();
+								img.style.transform = "rotate(90deg)";
+							});
+						},
+						function(error) {
+							console.log(error.code);
+						}, {
+							filename: "_doc/camera/",
+							resolution: res,
+							format: fmt
+						}
+					);
+				});
+				
+				function store(){
+					//图片上传至服务器
+					var imgs = document.getElementsByTagName("img");
+					for(var x in imgs){
+						if(imgs[x].src != undefined && imgs[x].src != "" && imgs[x].src.startsWith("file")){
+							var canvas = document.createElement("canvas");
+							var ctx = canvas.getContext("2d");
+							console.log(imgs[x].width + " || " + imgs[x].height)
+							ctx.drawImage(imgs[x], 0, 0, imgs[x].width, imgs[x].height);
+							var dataURL = canvas.toDataURL("image/jpg").split(",")[1];
+							//图片本体上传
+							mui.ajax({
+								url: "http://47.93.3.105/api/v1/order/photoAndUpload",
+								type: "POST",
+								async: false,
+								data: {
+									"data": dataURL,
+									"name": self.maintain_id + "/" + $(imgs[x]).closest("table").attr("class")
+								},
+								success: function(res) {
+								}
+							});
+							//图片路径存储
+							mui.ajax({
+								url: "http://47.93.3.105/api/v1/order/StorePhotoPath" + self.maintain_type,
+								type: "POST",
+								async: false,
+								data: {
+									"maintain_id" : self.maintain_id,
+									"item" : $(imgs[x]).closest("table").attr("class")
+								},
+								success: function(r){
+									console.log(r.msg);
+								},
+								error: function(err){
+									console.log(err);
+								}
+							});
+						}
+					}
+					
+					//存status
+					var s1s = $("#" + theClass).find(".status");
+					var item1 = new Array(s1s.length);
+					var value1 = new Array(s1s.length);
+					for(var x = 0; x < s1s.length; x++){
+						item1[x] = $(s1s[x]).closest("table").attr("class");
+						value1[x] = $(s1s[x]).val();
+					}
+					mui.ajax({
+						url: "http://47.93.3.105/api/v1/order/StoreStatus" + self.maintain_type,
+						type: "POST",
+						async: false,
+						data: {
+								"item" : item1,
+								"maintain_id" : self.maintain_id,
+								"value" : value1
+						},
+						success: function(res){
+							console.log(res.code);
+						}
+					});
+					
+					//存result
+					var s2s = $("#" + theClass).find(".result");
+					var item2 = new Array(s2s.length);
+					var value2 = new Array(s2s.length);
+					for(var x = 0; x < s2s.length; x++){
+						item2[x] = $(s2s[x]).closest("table").attr("class");
+						value2[x] = $(s2s[x]).val();
+					}
+					mui.ajax({
+						url: "http://47.93.3.105/api/v1/order/StoreResult" + self.maintain_type,
+						type: "POST",
+						async: false,
+						data: {
+								"item" : item2,
+								"maintain_id" : self.maintain_id,
+								"value" : value2
+						},
+						success: function(res){
+							console.log(res.code);
+						}
+					});
+					
+					//存调校
+					var tj = $("#" + theClass).find(".tj");
+					var tja = [];
+					var tjb = []
+					var tjk = 0;
+					var tjm = 0;
+					for(var x = 0; x < tj.length; x++){
+						tja[tjk++] = $(tj[x]).parent().next().val();
+						tjb[tjm++] = $(tj[x]).closest("table").attr("class");
+					}
+					mui.ajax({
+						url: "http://47.93.3.105/api/v1/order/StoreTj" + self.maintain_type,
+						type: "POST",
+						async: false,
+						data: {
+								"item" : tjb,
+								"maintain_id" : self.maintain_id,
+								"value" : tja
+						},
+						success: function(res){
+							console.log(res.code);
+						}
+					});
+					
+					//存更换
+					var gh = $("#" + theClass).find(".gh");
+					var gha = [];
+					var ghb = []
+					var ghk = 0;
+					var ghm = 0;
+					for(var x = 0; x < gh.length; x++){
+						gha[tjk++] = $(gh[x]).parent().next().val();
+						ghb[tjm++] = $(gh[x]).closest("table").attr("class");
+					}
+					mui.ajax({
+						url: "http://47.93.3.105/api/v1/order/StoreGh" + self.maintain_type,
+						type: "POST",
+						async: false,
+						data: {
+								"item" : ghb,
+								"maintain_id" : self.maintain_id,
+								"value" : gha
+						},
+						success: function(res){
+							console.log(res.code);
+						}
+					});
+				}
+				
+				//保存
+				document.getElementById("save").addEventListener("tap", function(){
+					var that = this;
+					mui(this).button("loading");
+					store();
+					$(this).attr("disabled", true);
+					mui.alert("保存成功", "提示", "确定", function(){
+						mui(that).button("reset");
+						$(that).attr("disabled", true);
+					});
+				});
+				
+				//检查选项是否填写完整
+				function check() {
+					var status = $("#" + theClass).find(".status");
+					for(var x = 0; x < status.length; x++){
+						if($(status[x]).val() == 0){
+							return false
+						}
+					}
+					var result = $("#" + theClass).find(".result");
+					for(var x = 0; x < result.length; x++){
+						if($(result[x]).val() == 0){
+							return false
+						}
+					}
+					return true;
+				}
+				
+				document.getElementById("next").addEventListener("tap", function() {
+				    if(check()) {
+				        mui.confirm("确定要进行下一步?", "提示", ["我再想想", "确定"], function(e) {
+				            if(e.index == 1) {
+				            	store();
+				            	mui.ajax({
+				            		url: "http://47.93.3.105/api/v1/order/Opt_5",
+									type: "POST",
+									async: false,
+									data: {
+										order_id: self.order_id,
+										prefinish_time: new Date()
+									},
+									success: function(res){
+										console.log(res.code);
+									}
+				            	});
+				            	mui.openWindow({
+				            		url: "maintenance-extrainfo.html",
+				            		extras: {
+				            			order_id : self.order_id,
+										maintain_id : self.maintain_id,
+										maintain_type : self.maintain_type
+				            		},
+				            		createNew: true
+				           		});
+				            }
+				        });
+				    }
+				    else{
+				    	mui.alert("选项没有填完，请检查!");
+				    }
+				});
+
+				//手机返回键
+				mui.back = function() {
+					mui.openWindow({
+						url: "order-processing.html",
+						extras: {
+							order_id: self.order_id
+						},
+						createNew: true,
+						waiting: {
+							title: "正在加载..."
+						}
+					});
+				};
+				//左上角返回键
+				document.getElementById("back").addEventListener("tap", function() {
+					mui.openWindow({
+						url: "order-processing.html",
+						extras: {
+							order_id: self.order_id
+						},
+						createNew: true,
+						waiting: {
+							title: "正在加载..."
+						}
+					});
+				});
+
+			});
+		</script>
+	</body>
+
+</html>

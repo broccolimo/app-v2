@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-icon mui-icon-left-nav" id="back"></a>
+			<h1 class="mui-title">维保详情</h1>
+		</header>
+		<div class="mui-content">
+			<button type="button" id="store">保存</button>
+			<button type="button" id="next">下一步</button>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function() {
+				var self = plus.webview.currentWebview();
+
+				//检查选项是否填写完整
+				function check() {
+					return true;
+				}
+				document.getElementById("next").addEventListener("tap", function() {
+					if(check()) {
+						mui.confirm("确定要进行下一步?", "提示", ["我再想想", "确定"], function(e) {
+							if(e.index == 1) {
+								mui.ajax({
+									url: "http://47.93.3.105/api/v1/order/Opt_5",
+									type: "POST",
+									async: false,
+									data: {
+										"order_id": self.order_id,
+										"prefinish_time": new Date()
+									},
+									success: function(res) {
+										if(res.code == 0) {
+											mui.openWindow({
+												url: "maintenance-extrainfo.html",
+												extras: {
+													order_id: self.order_id
+												},
+												createNew: true
+											});
+										} 
+										else {
+											mui.alert("系统繁忙,请稍后尝试", "提示", "确定");
+										}
+									}
+								});
+							}
+						});
+					}
+				});
+
+				//手机返回键
+				mui.back = function() {
+					mui.openWindow({
+						url: "order-processing.html",
+						extras: {
+							order_id: self.order_id
+						},
+						createNew: true
+					});
+				};
+				//左上角返回键
+				document.getElementById("back").addEventListener("tap", function() {
+					mui.openWindow({
+						url: "order-processing.html",
+						extras: {
+							order_id: self.order_id
+						},
+						createNew: true
+					});
+				});
+			});
+		</script>
+	</body>
+
+</html>

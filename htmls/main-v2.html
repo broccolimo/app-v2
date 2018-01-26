@@ -1,0 +1,441 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.css" rel="stylesheet" />
+		<link href="../css/iconfont.css" rel="stylesheet" />
+		<style type="text/css">
+			.my-upblank {
+				margin: 20px 0 0 0;
+			}
+			
+			.span1 {
+				width: 50px;
+				height: 50px;
+			}
+			
+			.icon-a {
+				width: 100px;
+				height: 100px;
+			}
+			
+			#ggg {
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 id="title" class="mui-title">西子电梯系统</h1>
+		</header>
+
+		<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item mui-active" href="#s1">
+				<span class="mui-icon iconfont icon-shouye"></span>
+				<span class="mui-tab-label">首页</span>
+			</a>
+			<span class="mui-tab-item" id="bottom2">
+		        <span class="mui-icon iconfont icon-zhaoxiangji"></span>
+			<span class="mui-tab-label">拍一张</span>
+			</span>
+			<a class="mui-tab-item" id="bottom3">
+				<span class="mui-icon iconfont icon-erweima"></span>
+				<span class="mui-tab-label">扫一扫</span>
+			</a>
+			<a class="mui-tab-item" href="#s4">
+				<span class="mui-icon iconfont icon-shezhi"></span>
+				<span class="mui-tab-label">个人中心</span>
+			</a>
+		</nav>
+
+		<div class="mui-content">
+
+			<!--图标-->
+			<div id="s1" class="mui-control-content mui-active">
+				<!--轮播图-->
+				<div id="slider" class="mui-slider">
+					<div class="mui-slider-group mui-slider-loop">
+						<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+						<div class="mui-slider-item mui-slider-item-duplicate">
+							<a href="#">
+								<img src="../images/banner3.jpg">
+							</a>
+						</div>
+						<!-- 第一张 -->
+						<div class="mui-slider-item">
+							<a href="#">
+								<img src="../images/banner1.jpg">
+							</a>
+						</div>
+						<!-- 第二张 -->
+						<div class="mui-slider-item">
+							<a href="#">
+								<img src="../images/banner2.jpg">
+							</a>
+						</div>
+						<!-- 第三张 -->
+						<div class="mui-slider-item">
+							<a href="#">
+								<img src="../images/banner3.jpg">
+							</a>
+						</div>
+						<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+						<div class="mui-slider-item mui-slider-item-duplicate">
+							<a href="#">
+								<img src="../images/banner1.jpg">
+							</a>
+						</div>
+					</div>
+					<div class="mui-slider-indicator">
+						<div class="mui-indicator mui-active"></div>
+						<div class="mui-indicator"></div>
+						<div class="mui-indicator"></div>
+					</div>
+				</div>
+
+				<ul class="mui-table-view mui-grid-view mui-grid-9">
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="btn1">
+						<span class="mui-icon mui-icon-list"></span>
+						<div class="mui-media-body">维保管理</div>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="btn2">
+						<span class="mui-icon mui-icon-bars"></span>
+						<div class="mui-media-body">延时管理</div>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="btn3">
+						<span class="mui-icon mui-icon-navigate"></span>
+						<div class="mui-media-body">退单管理</div>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="btn4">
+						<span class="mui-icon mui-icon-location"></span>
+						<div class="mui-media-body">工单审核</div>
+					</li>
+				</ul>
+
+				<button type="button" onclick="test1();">增加工单</button>
+				<button type="button" onclick="test2();">增加电梯</button>
+				<button type="button" onclick="test3();">电子签名</button>
+				<button type="button" onclick="test4();" id="ttt">拍照上传</button>
+				<button type="button" onclick="test5();">给爸爸成</button>
+				<button type="button" onclick="test6();">添加维保单</button>
+				<div style="width: 100%; height: 400px;"><img id="ggg" alt="无拍照图片" /></div>
+			</div>
+
+			<!--个人中心-->
+			<div id="s4" class="mui-control-content">
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">用户账号</li>
+				</ul>
+				<ul class="mui-table-view my-upblank">
+					<li class="mui-table-view-cell">刷新用户信息</li>
+					<li class="mui-table-view-cell">清除数据</li>
+				</ul>
+				<ul class="mui-table-view my-upblank">
+					<li class="mui-table-view-cell">关于软件</li>
+					<li class="mui-table-view-cell">检查新版本</li>
+					<li class="mui-table-view-cell">问题反馈</li>
+				</ul>
+
+				<div class="my-upblank" id="logout" style="text-align: center; color: #FFFFFF; background-color: red; height: 40px; line-height: 40px;">退出当前账号</li>
+				</div>
+			</div>
+
+		</div>
+
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function() {
+				var self = plus.webview.currentWebview();
+				//退出当前账户
+				document.getElementById("logout").addEventListener("tap", function() {
+					mui.confirm("确定要退出当前账户?", "提示", ["取消", "确定"], function(e) {
+						if(e.index == 1) {
+							mui.openWindow({
+								url: "login.html",
+								createNew: true
+							});
+						}
+					});
+				});
+
+				//维保管理
+				document.getElementById("btn1").addEventListener("tap", function() {
+					if(localStorage.getItem("role") == 1) {
+						mui.alert("您当前不可进行此操作", "提示", "确定");
+						return;
+					}
+					mui.openWindow({
+						url: "maintenance.html",
+						createNew: true
+					});
+				});
+
+				//延时管理
+				document.getElementById("btn2").addEventListener("tap", function() {
+					if(localStorage.getItem("role") == 1) {
+						mui.alert("您当前不可进行此操作", "提示", "确定");
+						return;
+					}
+					mui.openWindow({
+						url: "delay-apply.html",
+						createNew: true
+					});
+				});
+
+				//退单管理
+				document.getElementById("btn3").addEventListener("tap", function() {
+					if(localStorage.getItem("role") == 1) {
+						mui.alert("您当前不可进行此操作", "提示", "确定");
+						return;
+					}
+					mui.openWindow({
+						url: "charge-back.html",
+						createNew: true
+					});
+				});
+
+				//工单审核
+				document.getElementById("btn4").addEventListener("tap", function() {
+					if(localStorage.getItem("role") == 0) {
+						mui.alert("您当前不可进行此操作", "提示", "确定");
+						return;
+					}
+					mui.openWindow({
+						url: "review.html",
+						createNew: true
+					});
+				});
+
+				//设置退出
+				var first = null;
+				mui.back = function() {
+					if(!first) {
+						first = new Date().getTime();
+						mui.toast("再按一次退出应用");
+						setTimeout(function() {
+							first = null
+						}, 2000);
+					} else {
+						if(new Date().getTime() - first < 2000) {
+							plus.runtime.quit();
+						}
+					}
+				}
+
+				/*				var picRoot;
+								plus.io.resolveLocalFileSystemURL(
+									"_doc/", 
+									function(entry){
+										entry.getDirectory(
+											"camera", 
+											{
+												create: true
+											},
+											function(dir){
+												picRoot = dir.toLocalURL();
+												console.log(dir);
+												console.log("获取摄像头目录对象: " + dir.toLocalURL());
+											},
+											function(error){
+												mui.alert("路径未能获取");
+											}
+										);
+									},
+									function(error){
+										mui.alert("路径未能获取");
+									}
+								);*/
+
+				//调用摄像头
+				document.getElementById("bottom2").addEventListener("tap", function() {
+					var cmr = plus.camera.getCamera();
+					var res = cmr.supportedImageResolutions[0];
+					var fmt = cmr.supportedImageFormats[0];
+					cmr.captureImage(
+						function(path) {
+							plus.gallery.save(path, function() {
+								console.log("保存照片到相冊成功")
+							});
+						},
+						function(error) {
+							console.log(error.code);
+						}, {
+							filename: "_doc/camera/",
+							resolution: res,
+							format: fmt
+						}
+					);
+				});
+
+				//二维码
+				document.getElementById("bottom3").addEventListener("tap", function() {
+					mui.openWindow({
+						url: "qr.html",
+						createNew: true
+
+					});
+				});
+			});
+
+			//页面跳转
+			function jump(url) {
+				mui.openWindow({
+					url: url,
+					createNew: true
+				});
+			}
+
+			//test 加工单
+			function test1() {
+				mui.ajax({
+					url: "http://47.93.3.105/api/v1/order/addOrder",
+					type: "POST",
+					data: {
+						order_id: "288888888",
+						flag: 0,
+						maintain_id: "eeesssrr",
+						maintain_type: 1,
+						list_id: "36ffd5054357303432330888",
+						release_time: new Date(),
+						rating_time: "23天"
+					},
+					success: function(res) {
+						mui.toast(res);
+					}
+				});
+			}
+
+			//加电梯
+			function test2() {
+				mui.ajax({
+					url: "http://47.93.3.105/api/v1/device/register",
+					type: "POST",
+					data: {
+						name: "贾音新建的电梯XzOtis1",
+						useUnit: "yizhimc333",
+						code: "36ffd5054357303432330888",
+						registerID: "registCode888",
+						useUnitID: "com888",
+						productID: "product888",
+						makeUnit: "make888",
+						installUnit: "install888",
+						repairUnit: "repair888",
+						maintainUnit: "maintain888",
+						elevatorModel: "model888",
+						tractionMachineModel: "yeyin888",
+						motorPower: 1000,
+						controlBox: "cont888",
+						brakes: "break888",
+						speedLimiter: "speed888",
+						safetyGear: "safe888",
+						area: "north",
+						province: "河南省",
+						city: "荥阳市",
+						addr: "海东大厦",
+						jing: 116.33990590,
+						wei: 39.99960654
+					},
+					success: function(data) {
+						mui.toast("success");
+					}
+				});
+			}
+
+			function test3() {
+				mui.openWindow({
+					url: "signature.html",
+					createNew: true
+				});
+			}
+
+			function test4() {
+				var cmr = plus.camera.getCamera();
+				var res = cmr.supportedImageResolutions[0];
+				var fmt = cmr.supportedImageFormats[0];
+				cmr.captureImage(
+					function(path) {
+						plus.io.resolveLocalFileSystemURL(path, function(entry) {
+							var img = document.getElementById("ggg");
+							img.src = entry.toLocalURL();
+							img.style.transform = "rotate(90deg)"; 
+							img.onload = function() {
+								var canvas = document.createElement("canvas");
+								var ctx = canvas.getContext("2d");
+								ctx.drawImage(img, 0, 0, img.width, img.height);
+								var dataURL = canvas.toDataURL("image/jpeg").split(",")[1];
+								console.log(dataURL);
+								mui.ajax({
+									url: "http://47.93.3.105/api/v1/order/photoAndUpload",
+									type: "POST",
+									data: {
+										"data": dataURL,
+										"name": "3344"
+									},
+									success: function(res) {
+										console.log(res.msg);
+									},
+									error: function(err) {
+										console.log(err);
+									}
+								});
+							};
+						});
+					},
+					function(error) {
+						console.log(error.code);
+					}, {
+						filename: "_doc/camera/",
+						resolution: res,
+						format: fmt
+					}
+				);
+			}
+
+			function test5() {
+				var img = document.getElementById("ggg");
+				var canvas = document.createElement("canvas");
+				canvas.width = img.width;
+				canvas.height = img.height;
+
+				var ctx = canvas.getContext("2d");
+				ctx.drawImage(img, 0, 0, img.width, img.height);
+
+				var dataURL = canvas.toDataURL("image/png");
+				console.log(dataURL);
+				mui.ajax({
+					url: "http://47.93.3.105/api/v1/order/photoAndUpload",
+					type: "POST",
+					data: {
+						"data": dataURL.split(",")[1],
+						"name": "3344"
+					},
+					success: function(res) {
+						console.log(res.code);
+					}
+				});
+			}
+			
+			function test6() {
+				mui.ajax({
+					url: "http://47.93.3.105/api/v1/order/add-yearMaintain",
+					type: "POST",
+					data: {
+						"liftId": "36ffd5054357303432330888",
+						"maintain_id": "3-test",
+						"startDate" : new Date()
+					},
+					success: function(res) {
+						console.log(res.code + " || " + res.msg);
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>

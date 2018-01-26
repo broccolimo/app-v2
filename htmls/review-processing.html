@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<div class="mui-content">
+		    lalla
+		    <button type="button" id="pass">通过</button>
+		    <button type="button" id="unpass">不通过</button>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function(){
+				var self = plus.webview.currentWebview();
+				document.getElementById("pass").addEventListener("tap", function(){
+					mui.confirm("确认要审核通过吗?", "提示", ["取消", "确定"], function(e){
+						if(e.index == 1){
+							mui.ajax({
+								url: "http://47.93.3.105/api/v1/order/Opt_10",
+								type: "POST",
+								async: false,
+								data: {
+									"order_id" : self.order_id,
+									"pass_time" : new Date(),
+									"accept_person" : self.accept_person
+								},
+								success: function(res){
+									console.log(res.code + " || " + res.msg);
+									mui.alert("审核成功", "提示", "确定", function(){
+										mui.openWindow({
+											url: "main-v2.html",
+											createNew: true
+										});
+									});
+								}
+							});
+						}
+					})
+				});
+				
+				document.getElementById("unpass").addEventListener("tap", function(){
+					mui.confirm("确定要审核不予通过吗?", "提示", ["取消", "确定"], function(e){
+						if(e.index == 1){
+							mui.openWindow({
+								url: "unpass-reason.html",
+								extras: {
+									"order_id" : self.order_id,
+									"accept_person" : self.accept_person
+								},
+								createNew: true
+							});
+						}
+					});
+				});
+			});
+			mui.back = function(){
+				mui.openWindow({
+					url: "review.html",
+					createNew: true
+				});
+			}
+		</script>
+	</body>
+
+</html>

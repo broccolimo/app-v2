@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			.my-upblank {
+				margin: 20px 0 0 0;
+			}
+			
+			span {
+				float: right;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">订单详情</h1>
+		</header>
+
+		<div class="mui-content">
+			<div class="mui-table-view-cell">派单详情</div>
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">工单编号:<span></span></li>
+				<li class="mui-table-view-cell">系统派发时间:<span></span></li>
+				<li class="mui-table-view-cell">人工复核通过时间:<span></span></li>
+				<li class="mui-table-view-cell">电梯型号:<span></span></li>
+				<li class="mui-table-view-cell">维保类别:<span></span></li>
+				<li class="mui-table-view-cell">电梯位置:<span></span></li>
+				<li class="mui-table-view-cell">维保人员:<span></span></li>
+				<li class="mui-table-view-cell">移动电话:<span></span></li>
+			</ul>
+			<div class="mui-table-view-cell">接单</div>
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">接单时间:<span></span></li>
+				<li class="mui-table-view-cell">接单人:<span></span></li>
+			</ul>
+			<div class="mui-table-view-cell">签到</div>
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">现场签到时间:<span></span></li>
+			</ul>
+			<div class="mui-table-view-cell">完成</div>
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">复核通过时间:<span></span></li>
+				<li class="mui-table-view-cell">维保人:<span></span></li>
+				<li class="mui-table-view-cell">协助人:<span></span></li>
+				<li class="mui-table-view-cell">费用:<span></span></li>
+			</ul>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function() {
+				var self = plus.webview.currentWebview();
+
+				mui.ajax({
+					url: "http://47.93.3.105/api/v1/order/Opt_2",
+					type: "GET",
+					async: false,
+					data: {
+						"order_id": self.order_id
+					},
+					success: function(res) {
+						var spans = document.getElementsByTagName("span");
+						spans[0].innerHTML = self.order_id;
+						spans[1].innerHTML = new Date(res.msg.obj.release_time).toLocaleString();
+						spans[2].innerHTML = new Date(res.msg.obj.pass_time).toLocaleString();
+						spans[3].innerHTML = res.msg.xinghao;
+						switch(res.msg.obj.maintain_type) {
+							case 0:
+								spans[4].innerHTML = "半月维保";
+								break;
+							case 1:
+								spans[4].innerHTML = "季度维保";
+								break;
+							case 2:
+								spans[4].innerHTML = "半年维保";
+								break;
+							case 3:
+								spans[4].innerHTML = "一年维保";
+								break;
+							default:
+								break;
+						};
+						spans[5].innerHTML = res.msg.addr;
+						spans[6].innerHTML = localStorage.getItem("user");
+						spans[7].innerHTML = localStorage.getItem("phone");
+						spans[8].innerHTML = new Date(res.msg.obj.accept_time[res.msg.obj.accept_time.length - 1]).toLocaleString();
+						spans[9].innerHTML = localStorage.getItem("user");
+						spans[10].innerHTML = new Date(res.msg.obj.start_time[res.msg.obj.start_time.length - 1]).toLocaleString();
+						spans[11].innerHTML = new Date(res.msg.obj.pass_time).toLocaleString();
+						spans[12].innerHTML = localStorage.getItem("user");
+						spans[13].innerHTML = res.msg.obj.assist[0].assist_name;
+						spans[14].innerHTML = res.msg.obj.artificial_cost + "元";
+					}
+				});
+			});
+		</script>
+	</body>
+
+</html>

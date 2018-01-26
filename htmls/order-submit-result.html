@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">提交结果</h1>
+		</header>
+
+		<div class="mui-content">
+			<label style="text-align: center;"><h2>提交成功,请等待部门主管审核</h2></label>
+			<br />
+			<button type="button" id="back" style="margin-left: 40%; background-color: #007AFF; color: #FFFFFF;">返回首页</button>
+		</div>
+
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function() {
+				document.getElementById("back").addEventListener("tap", function() {
+					mui.openWindow({
+						url: "main-v2.html",
+						createNew: true
+					});
+				});
+				mui.back = function() {
+					mui.openWindow({
+						url: "main-v2.html",
+						createNew: true
+					});
+				}
+			});
+		</script>
+	</body>
+
+</html>

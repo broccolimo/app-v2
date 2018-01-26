@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+<!--		<script type="text/javascript" src='http://api.map.baidu.com/api?v=2.0&ak=VikqtilQKbEv1vyQDe1GYv8ezHpplDNk'></script>
+		<script type="text/javascript src="http://developer.baidu.com/map/jsdemo/demo/convertor.js""></script>-->
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">工单详情</h1>
+		</header>
+		<div class="mui-content">
+		    <button type="button" id="btnQd">签到</button>
+		    <br>
+		    <label id="it1"></label>
+		    <br>
+		    444
+		    <br>
+		    <button type="button" id="btnAccept">接单</button>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function(){
+				var self = plus.webview.currentWebview();
+				document.getElementById("it1").innerHTML = self.orderId;
+				document.getElementById("btnAccept"),addEventListener("tap", function(){
+					if(localStorage.getItem("canAccept") == "false"){
+						mui.toast("您当前有订单未完成，无法继续接单");
+						return;
+					}
+					var code = -1;
+/*					mui.ajax({
+						url: "http://47.93.3.105/api/v1/order/Opt_1",
+						type: "POST",
+						data: {
+							//判断修改user表中的哪条记录
+							"name" : plus.storage.getItem("user"),
+							//给这条记录进行更新
+							"orderId" : self.orderId,
+							//在工单表中增加接单时间
+							"accept_time" : new Date()
+						},
+						success: function(res){
+							console.log(res.code + " || " + res.msg);
+							mui.toast("接单成功");
+						}
+					});*/
+					mui.alert("接单成功", function(){
+						mui.openWindow({
+							url: "maintenance.html",
+							createNew: true,
+							extras: {
+								"code" : 1
+							}
+						});
+					});
+				});
+/*				document.getElementById("btnQd").addEventListener("tap", function(){
+					
+				});*/
+/*				var location;
+				var error;
+				plus.geolocation.watchPosition(
+					function(p){
+						location = "当前位置: 经度" + p.coords.longitude + ", 纬度" + p.coords.latitude;
+					},
+					function(e){
+						error = 'Geolocation error: ' + e.message;
+						mui.toast(error);
+					}
+				);*/
+/*				plus.geolocation.getCurrentPosition(translatePoint,function(e){
+       		 		mui.toast("异常:" + e.message);
+    			});
+    			
+    			function translatePoint(position){
+    				currentLon = position.coords.longitude;
+    				currentLat = position.coords.latitude;
+    				location = "当前位置: 经度" + currentLon + ", 纬度" + currentLat;
+    			};*/
+/*    			document.getElementById("btn1").addEventListener("tap", function(){
+    				mui.toast(location);
+    			});*/
+    			
+			});
+		</script>
+	</body>
+
+</html>

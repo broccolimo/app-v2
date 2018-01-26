@@ -1,0 +1,150 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">请等待,系统&人工审核中...</h1>
+		</header>
+
+		<div class="mui-content">
+			<span>请继续填写以下信息</span>
+			<br>
+			<br>
+			<span>费用(单位:元)</span>
+			<br>
+			<br>
+			<!--span和input必须写在同一行		中间不留空隙	下同-->
+			<span>人工费用:&nbsp;</span><input type="text" style="width: auto;" id="i-1-1" class="checkItem" />
+			<br>
+			<span>出差费用:&nbsp;</span><input type="text" style="width: auto;" id="i-1-2" class="checkItem" />
+			<br>
+			<span>材料费用:&nbsp;</span><input type="text" style="width: auto;" id="i-1-3" class="checkItem" />
+			<br>
+			<br>
+			<span>时间</span>
+			<br>
+			<br>
+			<span>额定时间:&nbsp;</span><label id="i-2-1"></label>
+			<br>
+			<span>实际时间:&nbsp;</span><label id="i-2-2"></label>
+			<br>
+			<br>
+			<span>人员</span>
+			<br>
+			<br>
+			<span>接单人员姓名:&nbsp;</span><label id="j-1"></label>
+			<br>
+			<br>
+			<span>协助人员姓名:&nbsp;</span><input type="text" style="width: auto;" id="i-3-1" class="checkItem" />
+			<br>
+			<span>单位:&nbsp;</span><input type="text" style="width: auto;" id="i-3-2" class="checkItem" />
+			<br>
+			<span>移动电话:&nbsp;</span><input type="text" style="width: auto;" id="i-3-3" class="checkItem" />
+			<br>
+			<br>
+			<span>备注/补充信息:&nbsp;</span><textarea id="i-4-1" class="checkItem"></textarea>
+			<br>
+			<br>
+			<input type="file" value="上传图片" name="上传图片" />
+			<br>
+			<br>
+			<button type="button" id="next">下一步</button>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function() {
+				//self是核心 每个plusReady都先声明
+				var self = plus.webview.currentWebview();
+
+				//先把页面上一些内容加载出来
+				mui.ajax({
+					url: "http://47.93.3.105/api/v1/order/getOrderInfo",
+					type: "GET",
+					async: false,
+					data: {
+						"order_id": self.order_id
+					},
+					success: function(res) {
+						document.getElementById("i-2-1").innerHTML = res.msg.obj.rating_time;
+						var timestampsub = new Date(res.msg.obj.prefinish_time).getTime() - new Date(res.msg.obj.accept_time[res.msg.obj.accept_time.length - 1]).getTime();
+						var show = "";
+						//计算天数
+						var days = Math.floor(timestampsub / (1000 * 60 * 60 * 24));
+						if(days != 0) {
+							show = show + days + "天";
+						}
+						//除去天数的毫秒数
+						var level1 = timestampsub % (1000 * 3600 * 24);
+						//计算小时数
+						var hours = Math.floor(level1 / (1000 * 60 * 60));
+						if(hours != 0) {
+							show = show + hours + "小时";
+						}
+						//除去小时数的毫秒数
+						var level2 = level1 % (1000 * 60 * 60);
+						//计算分钟数
+						var minutes = Math.floor(level2 / (1000 * 60));
+						if(minutes != 0) {
+							show = show + minutes + "分钟";
+						}
+						document.getElementById("i-2-2").innerHTML = show;
+					}
+				});
+
+				document.getElementById("j-1").innerHTML = localStorage.getItem("user");
+
+				//点击下一步的操作
+				document.getElementById("next").addEventListener("tap", function() {
+					var checkItems = document.getElementsByClassName("checkItem");
+					for(var i = 0; i < checkItems.length; i++) {
+						if(checkItems[i].value == "") {
+							var content = checkItems[i].previousSibling.innerHTML;
+							var iw = content.substring(0, content.indexOf(":"));
+							mui.alert("请填写" + iw, "提示", "确定");
+							return;
+						}
+					}
+					mui.ajax({
+						url: "http://47.93.3.105/api/v1/order/Opt_6",
+						type: "POST",
+						async: false,
+						data: {
+							"order_id" : self.order_id,
+							"artificial_cost": document.getElementById("i-1-1").value,
+							"trip_cost": document.getElementById("i-1-2").value,
+							"material_cost": document.getElementById("i-1-3").value,
+							"assist_name": document.getElementById("i-3-1").value,
+							"assist_commany": document.getElementById("i-3-2").value,
+							"assist_phone": document.getElementById("i-3-3").value,
+							"note_information": document.getElementById("i-4-1").value
+						},
+						success: function(res) {
+							if(res.code == 0) {
+								mui.openWindow({
+									url: "feedback.html",
+									extras: {
+										order_id: self.order_id
+									},
+									createNew: true
+								});
+							}
+							else{
+								mui.alert("系统出错", "提示", "确定");
+							}
+						}
+					});
+				});
+			});
+		</script>
+	</body>
+
+</html>
