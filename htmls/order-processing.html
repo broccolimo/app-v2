@@ -136,6 +136,8 @@
 						//flag=1表示此单尚未开始
 						//加载地图 和 开始按钮
 						if(res.msg.obj.flag == 1) {
+							var f_1_maintain_id = res.msg.obj.maintain_id;
+							var f_1_maintain_type = res.msg.obj.maintain_type;
 							var div_map = document.createElement("div");
 							item.appendChild(div_map);
 							div_map.id = "map";
@@ -155,7 +157,6 @@
 							var pos2;
 							translateCallback = function(data) {
 								if(data.status == 0) {
-									console.log(1);
 									pos1 = new BMap.Point(data.points[0]["lng"], data.points[0]["lat"]);
 									var marker = new BMap.Marker(data.points[0]);
 									map.addOverlay(marker);
@@ -170,7 +171,6 @@
 							//加载电梯位置
 							translateCallback2 = async function(data) {
 								if(data.status == 0) {
-									console.log(2);
 									pos2 = new BMap.Point(data.points[0]["lng"], data.points[0]["lat"]);
 									var marker = new BMap.Marker(data.points[0]);
 									map.addOverlay(marker);
@@ -220,11 +220,14 @@
 												accept_person: localStorage.getItem("user")
 											},
 											success: function(res) {
+												console.log(res.code + " || " + res.msg);
 												if(res.code == 0) {
 													mui.openWindow({
 														url: "maintenance-detail.html",
 														extras: {
-															order_id: self.order_id
+															order_id: self.order_id,
+															maintain_id : f_1_maintain_id,
+															maintain_type : f_1_maintain_type
 														},
 														createNew: true
 													});

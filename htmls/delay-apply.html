@@ -21,7 +21,7 @@
 		</header>
 		
 		<div class="mui-content">
-			请填写:
+			请填写申请说明:
 		    <textarea id="textarea" rows="10" cols="20"></textarea>
 		    <button type="button" class="btn" id="submit">提交</button>
 		    <button type="button" class="btn" id="cancel">取消</button>
@@ -32,6 +32,15 @@
 		<script type="text/javascript">
 			mui.init();
 			mui.plusReady(function(){
+				var self = plus.webview.currentWebview();
+				document.getElementById("submit").addEventListener("tap", function(){
+					mui.alert("申请成功", "提示", "确定", function(){
+						mui.openWindow({
+							url: "main-v2.html",
+							createNew: true
+						});
+					});
+				});
 				document.getElementById("cancel").addEventListener("tap", function(){
 					mui.back();
 				});

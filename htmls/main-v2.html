@@ -117,13 +117,13 @@
 					</li>
 				</ul>
 
-				<button type="button" onclick="test1();">增加工单</button>
+				<!--<button type="button" onclick="test1();">增加工单</button>
 				<button type="button" onclick="test2();">增加电梯</button>
 				<button type="button" onclick="test3();">电子签名</button>
 				<button type="button" onclick="test4();" id="ttt">拍照上传</button>
 				<button type="button" onclick="test5();">给爸爸成</button>
 				<button type="button" onclick="test6();">添加维保单</button>
-				<div style="width: 100%; height: 400px;"><img id="ggg" alt="无拍照图片" /></div>
+				<div style="width: 100%; height: 400px;"><img id="ggg" alt="无拍照图片" /></div>-->
 			</div>
 
 			<!--个人中心-->
@@ -182,8 +182,15 @@
 						mui.alert("您当前不可进行此操作", "提示", "确定");
 						return;
 					}
+					if(localStorage.getItem("order_processing") == undefined){
+						mui.alert("您当前没有订单进行", "提示", "确定");
+						return;
+					}
 					mui.openWindow({
 						url: "delay-apply.html",
+						extras: {
+							order_processing : localStorage.getItem("order_processing")
+						},
 						createNew: true
 					});
 				});
